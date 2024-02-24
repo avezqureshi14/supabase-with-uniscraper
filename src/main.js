@@ -18,8 +18,7 @@ const runActor = async () => {
     switch (action) {
       case LIST_APPS: {
         const apps = await storeInstance.listApps(input);
-        await Actor.pushData(apps.slice(0, input.limit));
-
+        
         // Use Promise.all to wait for all async operations to complete
         await Promise.all(
           apps.map(async (app) => {
@@ -27,10 +26,11 @@ const runActor = async () => {
             await axios.post(
               "https://avez-blog-2023-end.onrender.com/apps",
               appDetails
+              );
+            })
             );
-          })
-        );
-
+            
+            await Actor.pushData(apps.slice(0, input.limit));
         break;
       }
       case LIST_DEVELOPER_APPS: {
