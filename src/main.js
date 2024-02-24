@@ -9,60 +9,6 @@ import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import axios from "axios";
 import gplay from "google-play-scraper";
 
-const extractData = {
-  title: data?.title,
-  description: data?.description,
-  descriptionHTML: data?.descriptionHTML,
-  summary: data?.summary,
-  installs: data?.installs,
-  minInstalls: data?.minInstalls,
-  maxInstalls: data?.maxInstalls,
-  score: data?.score,
-  scoreText: data?.scoreText,
-  ratings: data?.ratings,
-  reviews: data?.reviews,
-  histogram: data?.histogram,
-  price: data?.price,
-  free: data?.free,
-  currency: data?.currency,
-  priceText: data?.priceText,
-  available: data?.available,
-  offersIAP: data?.offersIAP,
-  IAPRange: data?.IAPRange,
-  androidVersion: data?.androidVersion,
-  androidVersionText: data?.androidVersionText,
-  androidMaxVersion: data?.androidMaxVersion,
-  developer: data?.developer,
-  developerId: data?.developerId,
-  developerEmail: data?.developerEmail,
-  developerWebsite: data?.developerWebsite,
-  developerAddress: data?.developerAddress,
-  privacyPolicy: data?.privacyPolicy,
-  developerInternalID: data?.developerInternalID,
-  genre: data?.genre,
-  genreId: data?.genreId,
-  categories: data?.categories,
-  icon: data?.icon,
-  headerImage: data?.headerImage,
-  screenshots: data?.screenshots,
-  video: data?.video,
-  videoImage: data?.videoImage,
-  previewVideo: data?.previewVideo,
-  contentRating: data?.contentRating,
-  contentRatingDescription: data?.contentRatingDescription,
-  adSupported: data?.adSupported,
-  released: data?.released,
-  updated: data?.updated,
-  version: data?.version,
-  recentChanges: data?.recentChanges,
-  comments: data?.comments,
-  preregister: data?.preregister,
-  earlyAccessEnabled: data?.earlyAccessEnabled,
-  isAvailableInPlayPass: data?.isAvailableInPlayPass,
-  appId: data?.appId,
-  url: data?.url,
-};
-
 const runActor = async () => {
   try {
     await Actor.init();
@@ -79,8 +25,57 @@ const runActor = async () => {
           apps?.map(async (app) => {
             try {
               const data = await gplay.app({ appId: app.appId });
-              console.log(data);
-
+              const title = data?.title;
+              const description = data?.description;
+              const descriptionHTML = data?.descriptionHTML;
+              const summary = data?.summary;
+              const installs = data?.installs;
+              const minInstalls = data?.minInstalls;
+              const maxInstalls = data?.maxInstalls;
+              const score = data?.score;
+              const scoreText = data?.scoreText;
+              const ratings = data?.ratings;
+              const reviews = data?.reviews;
+              const histogram = data?.histogram;
+              const price = data?.price;
+              const free = data?.free;
+              const currency = data?.currency;
+              const priceText = data?.priceText;
+              const available = data?.available;
+              const offersIAP = data?.offersIAP;
+              const IAPRange = data?.IAPRange;
+              const androidVersion = data?.androidVersion;
+              const androidVersionText = data?.androidVersionText;
+              const androidMaxVersion = data?.androidMaxVersion;
+              const developer = data?.developer;
+              const developerId = data?.developerId;
+              const developerEmail = data?.developerEmail;
+              const developerWebsite = data?.developerWebsite;
+              const developerAddress = data?.developerAddress;
+              const privacyPolicy = data?.privacyPolicy;
+              const developerInternalID = data?.developerInternalID;
+              const genre = data?.genre;
+              const genreId = data?.genreId;
+              const categories = data?.categories;
+              const icon = data?.icon;
+              const headerImage = data?.headerImage;
+              const screenshots = data?.screenshots;
+              const video = data?.video;
+              const videoImage = data?.videoImage;
+              const previewVideo = data?.previewVideo;
+              const contentRating = data?.contentRating;
+              const contentRatingDescription = data?.contentRatingDescription;
+              const adSupported = data?.adSupported;
+              const released = data?.released;
+              const updated = data?.updated;
+              const version = data?.version;
+              const recentChanges = data?.recentChanges;
+              const comments = data?.comments;
+              const preregister = data?.preregister;
+              const earlyAccessEnabled = data?.earlyAccessEnabled;
+              const isAvailableInPlayPass = data?.isAvailableInPlayPass;
+              const appId = data?.appId;
+              const url = data?.url;
               await axios.post("https://avez-blog-2023-end.onrender.com/apps", {
                 title,
                 description,
@@ -132,7 +127,7 @@ const runActor = async () => {
                 earlyAccessEnabled,
                 isAvailableInPlayPass,
                 appId,
-                url,
+                url
               });
             } catch (error) {
               console.log(error);
