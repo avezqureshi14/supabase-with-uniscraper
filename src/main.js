@@ -24,7 +24,7 @@ const runActor = async () => {
         await Promise.all(
           apps?.map(async (app) => {
             try {
-              const data = await gplay.app({ appId: app.appId });
+              const data = await storeInstance.getAppDetails({ appId: app.appId })
               const title = data?.title;
               const description = data?.description;
               const descriptionHTML = data?.descriptionHTML;
