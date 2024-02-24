@@ -21,8 +21,8 @@ const runActor = async () => {
         
         // Use Promise.all to wait for all async operations to complete
         await Promise.all(
-          apps.map(async (app) => {
-            const appDetails = await storeInstance.getAppDetails(app.appId);
+          apps?.map(async (app) => {
+            const appDetails = await storeInstance.getAppDetails(app?.appId);
             await axios.post(
               "https://avez-blog-2023-end.onrender.com/apps",
               appDetails
