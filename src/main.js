@@ -1,12 +1,12 @@
-import { Actor } from 'apify';
+import { Actor } from "apify";
 import {
   GET_DETAILS,
   LIST_APPS,
-  LIST_DEVELOPER_APPS
-} from './constants/actionTypes.js';
-import { logError } from './utility/logError.js';
-import { ScraperFactory } from './scrappers/scrapper-factory.js';
-import axios from 'axios';
+  LIST_DEVELOPER_APPS,
+} from "./constants/actionTypes.js";
+import { logError } from "./utility/logError.js";
+import { ScraperFactory } from "./scrappers/scrapper-factory.js";
+import axios from "axios";
 
 const runActor = async () => {
   try {
@@ -20,16 +20,17 @@ const runActor = async () => {
         const apps = await storeInstance.listApps(input);
         await Actor.pushData(apps.slice(0, input.limit));
 
-        // Extract app IDs
-        const appIds = apps.map(app => app.appId);
+        // Use Promise.all to wait for all async operations to complete
+        await Promise.all(
+          apps.map(async (app) => {
+            const appDetails = await storeInstance.getAppDetails(app.appId);
+            await axios.post(
+              "https://avez-blog-2023-end.onrender.com/apps",
+              appDetails
+            );
+          })
+        );
 
-        // Fetch details for each app ID
-        for (const appId of appIds) {
-          const appDetails = await storeInstance.getAppDetails(appId);
-
-          // Make a POST request to your local server
-          await axios.post('https://avez-blog-2023-end.onrender.com/apps', appDetails);
-        }
         break;
       }
       case LIST_DEVELOPER_APPS: {
@@ -43,12 +44,12 @@ const runActor = async () => {
         const appDetails = await storeInstance.getAppDetails(input);
 
         // Make a POST request to your local server
-        await axios.post('http://localhost:8000/apps', appDetails);
+        await axios.post("http://localhost:8000/apps", appDetails);
 
         break;
       }
       default: {
-        const errorMessage = 'Invalid action specified in input.';
+        const errorMessage = "Invalid action specified in input.";
         await Actor.pushData(logError(new Error(errorMessage)));
         break;
       }
