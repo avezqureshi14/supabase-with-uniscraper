@@ -7,6 +7,7 @@ import {
 import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import axios from "axios";
+import gplay from "google-play-scraper";
 
 const runActor = async () => {
   try {
@@ -18,22 +19,28 @@ const runActor = async () => {
     switch (action) {
       case LIST_APPS: {
         const apps = await storeInstance.listApps(input);
-        
+
         // Use Promise.all to wait for all async operations to complete
         await Promise.all(
           apps?.map(async (app) => {
-            console.log(app.appId);
-            const appDetails = await storeInstance.getAppDetails(app?.appId);
-            await axios.post(
-              "https://avez-blog-2023-end.onrender.com/apps",
-              appDetails
-              );
-            })
-            );
             
-            await Actor.pushData(apps.slice(0, input.limit));
+            try {
+              const data = await gplay.app({ appId: app.appId });
+              console.log(data);
+              await axios.post(
+                "https://avez-blog-2023-end.onrender.com/apps",
+                data
+              );
+            } catch (error) {
+              console.log(error);
+            }
+          })
+        );
+
+        await Actor.pushData(apps.slice(0, input.limit));
         break;
       }
+
       case LIST_DEVELOPER_APPS: {
         const developerApps = await storeInstance.listDeveloperApps(input);
         await Actor.pushData(developerApps);
