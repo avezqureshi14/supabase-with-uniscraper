@@ -1,0 +1,7 @@
+export const FREE = 'FREE'
+export const PAID = 'PAID'
+export const APP_STORE = 'APP_STORE'
+export const GOOGLE_PLAY = 'GOOGLE_PLAY'
+export const LIST_APPS = 'LIST_APPS'
+export const LIST_DEVELOPER_APPS = 'LIST_DEVELOPER_APPS'
+export const GET_DETAILS = 'GET_DETAILS'
