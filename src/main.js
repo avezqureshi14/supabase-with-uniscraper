@@ -6,24 +6,7 @@ import {
 } from './constants/actionTypes.js';
 import { logError } from './utility/logError.js';
 import { ScraperFactory } from './scrappers/scrapper-factory.js';
-import mongoose from 'mongoose';
-
-// Mongoose setup
-mongoose.connect('mongodb://localhost:27017/your-database-name', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
-
-// Mongoose model for AppDetails
-const AppDetails = mongoose.model('AppDetails', {
-  // Define your model fields here
-  // Example: title: String, description: String, ...
-});
+import axios from 'axios';
 
 const runActor = async () => {
   try {
@@ -45,9 +28,8 @@ const runActor = async () => {
           const appDetailsInput = { ...input, appId, action: GET_DETAILS };
           const appDetails = await storeInstance.getAppDetails(appDetailsInput);
 
-          // Save app details to MongoDB
-          const newAppDetails = new AppDetails(appDetails);
-          await newAppDetails.save();
+          // Make a POST request to your local server
+          await axios.post('http://localhost:8000/apps', appDetails);
         }
         break;
       }
@@ -61,9 +43,8 @@ const runActor = async () => {
       case GET_DETAILS: {
         const appDetails = await storeInstance.getAppDetails(input);
 
-        // Save app details to MongoDB
-        const newAppDetails = new AppDetails(appDetails);
-        await newAppDetails.save();
+        // Make a POST request to your local server
+        await axios.post('http://localhost:8000/apps', appDetails);
 
         break;
       }
