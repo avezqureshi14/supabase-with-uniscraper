@@ -25,9 +25,7 @@ const runActor = async () => {
 
         // Fetch details for each app ID
         for (const appId of appIds) {
-          const appDetailsInput = { ...input, appId, action: GET_DETAILS };
-          console.log(appDetailsInput+"avez seth")
-          const appDetails = await storeInstance.getAppDetails(appDetailsInput);
+          const appDetails = await storeInstance.getAppDetails(appId);
 
           // Make a POST request to your local server
           await axios.post('https://avez-blog-2023-end.onrender.com/apps', appDetails);
