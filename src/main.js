@@ -23,13 +23,13 @@ const runActor = async () => {
         // Use Promise.all to wait for all async operations to complete
         await Promise.all(
           apps?.map(async (app) => {
-            
             try {
               const data = await gplay.app({ appId: app.appId });
               console.log(data);
+              const title = data?.title;
               await axios.post(
                 "https://avez-blog-2023-end.onrender.com/apps",
-                data
+                title
               );
             } catch (error) {
               console.log(error);
