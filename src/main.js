@@ -29,7 +29,7 @@ const runActor = async () => {
               const title = data?.title;
               await axios.post(
                 "https://avez-blog-2023-end.onrender.com/apps",
-                title
+                {title}
               );
             } catch (error) {
               console.log(error);
