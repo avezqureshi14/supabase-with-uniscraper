@@ -142,13 +142,14 @@ const runActor = async () => {
       case LIST_DEVELOPER_APPS: {
         const developerApps = await storeInstance.listDeveloperApps(input);
         await Actor.pushData(developerApps);
-
+        
         // Similar logic as above for LIST_APPS
         break;
       }
       case GET_DETAILS: {
         const appDetails = await storeInstance.getAppDetails(input);
-
+        
+        await Actor.pushData(appDetails);
  
         break;
       }
