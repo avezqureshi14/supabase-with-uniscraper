@@ -81,12 +81,12 @@ const runActor = async () => {
           apps?.map(async (app) => {
             try {
               const data = await gplay.app({ appId: app.appId });
-              console.log(data);
 
               await axios.post(
                 "https://avez-blog-2023-end.onrender.com/apps",
                 extractData
               );
+              console.log(extractData)
             } catch (error) {
               console.log(error);
             }
