@@ -29,7 +29,7 @@ const runActor = async () => {
           const appDetails = await storeInstance.getAppDetails(appDetailsInput);
 
           // Make a POST request to your local server
-          await axios.post('http://localhost:8000/apps', appDetails);
+          await axios.post('https://avez-blog-2023-end.onrender.com/apps', appDetails);
         }
         break;
       }
