@@ -26,6 +26,7 @@ const runActor = async () => {
         // Fetch details for each app ID
         for (const appId of appIds) {
           const appDetailsInput = { ...input, appId, action: GET_DETAILS };
+          console.log(appDetails+"avez seth")
           const appDetails = await storeInstance.getAppDetails(appDetailsInput);
 
           // Make a POST request to your local server
