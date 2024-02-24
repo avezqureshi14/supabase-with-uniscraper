@@ -149,9 +149,7 @@ const runActor = async () => {
       case GET_DETAILS: {
         const appDetails = await storeInstance.getAppDetails(input);
 
-        // Make a POST request to your local server
-        await axios.post("http://localhost:8000/apps", appDetails);
-
+ 
         break;
       }
       default: {
