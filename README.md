@@ -1,4 +1,4 @@
-# UniScrape - Your Ultimate App Store and Play Store Scraper
+# UniScrape - App Store and Play Store Scraper
 
 Hey there, Developer and App Enthusiast community! 👋 I'm excited to share a little coding adventure that has been brewing lately.
 
