@@ -30,7 +30,7 @@ const runActor = async () => {
         const apps = await storeInstance.listApps(input);
         const { selectedCollection, selectedCategory, platform, num } = input;
         await Promise.all(
-          apps?.slice(0, num)?.map(async (app) => {
+          apps?.slice(0, input.limit)?.map(async (app) => {
             try {
               const data = await storeInstance.getAppDetails({
                 appId: app?.id,
