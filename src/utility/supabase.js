@@ -13,7 +13,7 @@ export const getCategoryFromDatabase = async (categoryName) => {
     .select("*")
     .eq("category_name", categoryName)
     .single();
-
+    console.log(categoryName);
   if (error) {
     console.error("Error getting category from database:", error);
     return null;
