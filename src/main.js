@@ -28,7 +28,7 @@ const runActor = async () => {
     switch (action) {
       case LIST_APPS: {
         const apps = await storeInstance.listApps(input);
-        const { selectedCollection, selectedCategory, platform } = input;
+        const { selectedCollection, selectedCategory, platform, num } = input;
         await Promise.all(
           apps?.slice(0, num)?.map(async (app) => {
             try {
