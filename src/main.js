@@ -28,6 +28,7 @@ const runActor = async () => {
         const {
           selectedCollection,
           selectedCategory,
+          platform
         } = input;
         await Promise.all(
           apps?.map(async (app) => {
@@ -46,7 +47,7 @@ const runActor = async () => {
                 developer = await createDeveloperInDatabase(data.developer); // Implement this function
               }
 
-              const platform = await getPlatformFromDatabase(data.platform); // Implement this function
+              const platformId = await getPlatformFromDatabase(platform); // Implement this function
 
               const application = await createApplicationInDatabase({
                 application_identifier: data?.id,
@@ -74,7 +75,7 @@ const runActor = async () => {
                 screenshot_identifier: null,
                 supported_device_identifier: null,
                 review_identifier: null,
-                platform_identifier: platform,
+                platform_identifier: platformId,
                 category_identifier: category,
                 collection_identifier: collection,
               });
