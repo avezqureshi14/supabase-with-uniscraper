@@ -169,7 +169,7 @@ export const addScreenshotToDatabase = async (
 
 export const getSupportedDeviceFromDatabase = async (application_identifier) => {
   const { data, error } = await supabase
-    .from("review")
+    .from("supported_device")
     .select("*")
     .eq("application_identifier", application_identifier)
     .single();
