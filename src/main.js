@@ -6,7 +6,7 @@ import {
 } from "./constants/actionTypes.js";
 import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
-import { createDeveloperInDatabase, getCategoryFromDatabase, getCollectionFromDatabase, getDeveloperFromDatabase, getPlatformFromDatabase } from "./utility/supabase.js";
+import { createApplicationInDatabase, createDeveloperInDatabase, getCategoryFromDatabase, getCollectionFromDatabase, getDeveloperFromDatabase, getPlatformFromDatabase } from "./utility/supabase.js";
 
 const runActor = async () => {
   try {
@@ -36,7 +36,7 @@ const runActor = async () => {
 
               const platform = await getPlatformFromDatabase(data.platform); // Implement this function
 
-              const application = await createDeveloperInDatabase({
+              const application = await createApplicationInDatabase({
                 application_identifier: data?.id,
                 title: data?.title,
                 url: data?.url,
