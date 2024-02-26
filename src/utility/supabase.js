@@ -208,6 +208,19 @@ export const updateApplication = async (
   reviewId,
   supportedDeviceId
 ) => {
+  // Check if the supportedDeviceId exists in the supported_device table
+  const supportedDeviceExists = await supabase
+    .from("supported_device")
+    .select("*")
+    .eq("identifier", supportedDeviceId)
+    .single();
+
+  if (!supportedDeviceExists) {
+    console.error(`Supported device with ID ${supportedDeviceId} does not exist.`);
+    return null;
+  }
+
+  // Perform the update operation
   const { data, error } = await supabase
     .from("application")
     .update({
