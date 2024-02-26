@@ -167,7 +167,6 @@ export const addScreenshotToDatabase = async (
   }
 };
 
-
 export const getSupportedDeviceFromDatabase = async (application_identifier) => {
   const { data, error } = await supabase
     .from("review")
@@ -190,12 +189,9 @@ export const addSupportedDeviceToDatabase = async (
   supportedDeviceData
 ) => {
   const { data, error } = await supabase
-    .from("supported_devices")
+    .from("supported_device")
     .upsert(
-      [{ application_identifier: applicationId, ...supportedDeviceData }],
-      {
-        onConflict: ["application_identifier"],
-      }
+      [{ application_identifier: applicationId, ...supportedDeviceData }]
     );
 
   if (error) {
