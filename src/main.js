@@ -7,6 +7,8 @@ import {
 import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import {
+  addReviewToDatabase,
+  addSupportedDeviceToDatabase,
   createApplicationInDatabase,
   createDeveloperInDatabase,
   getCategoryFromDatabase,
@@ -25,11 +27,7 @@ const runActor = async () => {
     switch (action) {
       case LIST_APPS: {
         const apps = await storeInstance.listApps(input);
-        const {
-          selectedCollection,
-          selectedCategory,
-          platform
-        } = input;
+        const { selectedCollection, selectedCategory, platform } = input;
         await Promise.all(
           apps?.map(async (app) => {
             try {
@@ -37,16 +35,32 @@ const runActor = async () => {
                 appId: app?.id,
               });
 
-              const category = await getCategoryFromDatabase(selectedCategory);  
-              const collection = await getCollectionFromDatabase(selectedCollection); 
-              let developer = await getDeveloperFromDatabase(data.developer);  
+              const category = await getCategoryFromDatabase(selectedCategory);
+              const collection = await getCollectionFromDatabase(
+                selectedCollection
+              );
+              let developer = await getDeveloperFromDatabase(data.developer);
 
               if (!developer) {
-                developer = await createDeveloperInDatabase(data.developer);  
+                const developerData = {
+                  name: data.developer,
+                  developer_url: data.developerUrl,
+                  developer_website: data.developerWebsite,
+                };
+                developer = await createDeveloperInDatabase(developerData);
               }
 
-              const platformId = await getPlatformFromDatabase(platform);  
-
+              const platformId = await getPlatformFromDatabase(platform);
+              const reviewData = {
+                score: data?.score,
+                current_version_score: data?.currentVersionScore,
+                current_version_reviews: data?.currentVersionReviews,
+              };
+              const supportedDeviceData = {
+                device_name:data?.supportedDevices
+              }
+              const review_identifier = await addReviewToDatabase(data?.id,reviewData);
+              const supported_device_identifier = await addSupportedDeviceToDatabase(data?.id,supportedDeviceData)
               const application = await createApplicationInDatabase({
                 application_identifier: data?.id,
                 title: data?.title,
@@ -64,15 +78,15 @@ const runActor = async () => {
                 price: data?.price,
                 currency: data?.currency,
                 free: data?.free,
-                has_iap:null,
-                has_ads:null,
-                installs:null,
-                installs_range:null,
-                iap_range:null,
+                has_iap: null,
+                has_ads: null,
+                installs: null,
+                installs_range: null,
+                iap_range: null,
                 developer_identifier: developer,
                 screenshot_identifier: null,
-                supported_device_identifier: null,
-                review_identifier: null,
+                supported_device_identifier: supported_device_identifier,
+                review_identifier: review_identifier,
                 platform_identifier: platformId,
                 category_identifier: category,
                 collection_identifier: collection,
