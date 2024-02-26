@@ -58,7 +58,7 @@ export const getDeveloperFromDatabase = async (developerName) => {
 export const createDeveloperInDatabase = async (developerName) => {
   const { data, error } = await supabase
     .from("developer")
-    .upsert([{ name: developerName }], { onConflict: ["name"] });
+    .upsert([{ name: developerName }]);
 
   if (error) {
     console.error("Error creating developer in database:", error);
