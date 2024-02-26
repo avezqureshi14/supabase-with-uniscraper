@@ -18,9 +18,9 @@ const runActor = async () => {
     switch (action) {
       case LIST_APPS: {
         const apps = await storeInstance.listApps(input);
-        const { selectedCollection, selectedCategory, platform} = input;
+        const { selectedCollection, selectedCategory, platform,selectedCountry} = input;
         await Promise.all(
-          apps?.slice(0, input.limit)?.map(async (app) => {
+          apps?.slice(0, input.limit)?.map(async (app, index) => {
             try {
               const data = await storeInstance.getAppDetails({
                 appId: app?.id,
@@ -97,6 +97,14 @@ const runActor = async () => {
                 applicationIdentifier,
                 reviewData
               );
+
+              const rankingData = {
+                application_identifier: applicationIdentifier,
+                region: selectedCountry,
+                category_identifier: selectedCategory,
+                collection_identifier: selectedCollection,
+                rank: index+1,
+              }
               const supported_device_identifier =
                 await supabase.addSupportedDeviceToDatabase(
                   applicationIdentifier,
@@ -108,6 +116,8 @@ const runActor = async () => {
                 review_identifier,
                 supported_device_identifier
               );
+
+              await supabase.ranking(rankingData);
             } catch (error) {
               console.error(
                 `Error processing app details for appId: ${app?.id}`,

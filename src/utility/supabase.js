@@ -235,3 +235,17 @@ export const updateApplication = async (
 
   return data;
 };
+
+
+export const ranking = async (rankingData) => {
+  const { data, error } = await supabase
+    .from("rankings")
+    .upsert([rankingData]);
+
+  if (error) {
+    console.error("Error adding rankings in database:", error);
+    return null;
+  }
+};
+
+
