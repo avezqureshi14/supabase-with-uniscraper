@@ -37,17 +37,15 @@ const runActor = async () => {
                 appId: app?.id,
               });
 
-              const category = await getCategoryFromDatabase(selectedCollection); // Implement this function
-              const collection = await getCollectionFromDatabase(
-                data.collection
-              ); // Implement this function
-              let developer = await getDeveloperFromDatabase(selectedCategory); // Implement this function
+              const category = await getCategoryFromDatabase(selectedCategory);  
+              const collection = await getCollectionFromDatabase(selectedCollection); 
+              let developer = await getDeveloperFromDatabase(data.developer);  
 
               if (!developer) {
-                developer = await createDeveloperInDatabase(data.developer); // Implement this function
+                developer = await createDeveloperInDatabase(data.developer);  
               }
 
-              const platformId = await getPlatformFromDatabase(platform); // Implement this function
+              const platformId = await getPlatformFromDatabase(platform);  
 
               const application = await createApplicationInDatabase({
                 application_identifier: data?.id,
