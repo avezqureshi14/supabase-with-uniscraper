@@ -7,6 +7,7 @@ import {
 import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import * as supabase from "./utility/supabase.js";
+import { countries } from "./constants/countries.js";
 
 const runActor = async () => {
   try {
