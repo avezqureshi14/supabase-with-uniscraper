@@ -6,7 +6,14 @@ import {
 } from "./constants/actionTypes.js";
 import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
-import { createApplicationInDatabase, createDeveloperInDatabase, getCategoryFromDatabase, getCollectionFromDatabase, getDeveloperFromDatabase, getPlatformFromDatabase } from "./utility/supabase.js";
+import {
+  createApplicationInDatabase,
+  createDeveloperInDatabase,
+  getCategoryFromDatabase,
+  getCollectionFromDatabase,
+  getDeveloperFromDatabase,
+  getPlatformFromDatabase,
+} from "./utility/supabase.js";
 
 const runActor = async () => {
   try {
@@ -18,17 +25,22 @@ const runActor = async () => {
     switch (action) {
       case LIST_APPS: {
         const apps = await storeInstance.listApps(input);
-
+        const {
+          selectedCollection,
+          selectedCategory,
+        } = input;
         await Promise.all(
           apps?.map(async (app) => {
             try {
-              const data = await storeInstance.getAppDetails({ appId: app?.id });
+              const data = await storeInstance.getAppDetails({
+                appId: app?.id,
+              });
 
-              const category = await getCategoryFromDatabase(data.category); // Implement this function
+              const category = await getCategoryFromDatabase(selectedCollection); // Implement this function
               const collection = await getCollectionFromDatabase(
                 data.collection
               ); // Implement this function
-              let developer = await getDeveloperFromDatabase(data.developer); // Implement this function
+              let developer = await getDeveloperFromDatabase(selectedCategory); // Implement this function
 
               if (!developer) {
                 developer = await createDeveloperInDatabase(data.developer); // Implement this function
@@ -53,16 +65,14 @@ const runActor = async () => {
                 price: data?.price,
                 currency: data?.currency,
                 free: data?.free,
-                category_identifier:category,
-                collection_identifier:collection,
-                developer_identifier:developer,
-                screenshot_identifier:null,
-                supported_device_identifier:null,
-                review_identifier:null,
-                platform_identifier:platform
+                category_identifier: category,
+                collection_identifier: collection,
+                developer_identifier: developer,
+                screenshot_identifier: null,
+                supported_device_identifier: null,
+                review_identifier: null,
+                platform_identifier: platform,
               });
-
-              
             } catch (error) {
               console.error(
                 `Error processing app details for appId: ${app?.id}`,
@@ -80,8 +90,6 @@ const runActor = async () => {
       case LIST_DEVELOPER_APPS: {
         const developerApps = await storeInstance.listDeveloperApps(input);
         await Actor.pushData(developerApps);
-
-        // Similar logic as above for LIST_APPS
         break;
       }
       case GET_DETAILS: {
