@@ -25,7 +25,7 @@ export const getCategoryFromDatabase = async (categoryName) => {
 // Function to get a collection from the database based on the collection name
 export const getCollectionFromDatabase = async (collectionName) => {
   const { data, error } = await supabase
-    .from("collections")
+    .from("collection")
     .select("*")
     .eq("collection_name", collectionName)
     .single();
@@ -41,7 +41,7 @@ export const getCollectionFromDatabase = async (collectionName) => {
 // Function to get a developer from the database based on the developer name
 export const getDeveloperFromDatabase = async (developerName) => {
   const { data, error } = await supabase
-    .from("developers")
+    .from("developer")
     .select("*")
     .eq("name", developerName)
     .single();
@@ -57,7 +57,7 @@ export const getDeveloperFromDatabase = async (developerName) => {
 // Function to create a new developer in the database
 export const createDeveloperInDatabase = async (developerName) => {
   const { data, error } = await supabase
-    .from("developers")
+    .from("developer")
     .upsert([{ name: developerName }], { onConflict: ["name"] });
 
   if (error) {
@@ -69,7 +69,7 @@ export const createDeveloperInDatabase = async (developerName) => {
 // Function to get a platform from the database based on the platform name
 export const getPlatformFromDatabase = async (platformName) => {
   const { data, error } = await supabase
-    .from("platforms")
+    .from("platform")
     .select("*")
     .eq("platform_name", platformName)
     .single();
@@ -86,7 +86,7 @@ export const getPlatformFromDatabase = async (platformName) => {
 // Function to create a new application in the database
 export const createApplicationInDatabase = async (applicationData) => {
     const { data, error } = await supabase
-      .from("applications")
+      .from("application")
       .upsert([applicationData], { onConflict: ["title"] });
   
     if (error) {
