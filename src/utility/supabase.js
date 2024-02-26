@@ -87,7 +87,7 @@ export const getPlatformFromDatabase = async (platformName) => {
 export const createApplicationInDatabase = async (applicationData) => {
     const { data, error } = await supabase
       .from("application")
-      .upsert([applicationData], { onConflict: ["title"] });
+      .upsert([applicationData]);
   
     if (error) {
       console.error("Error creating application in database:", error);
