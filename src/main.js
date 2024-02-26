@@ -101,9 +101,10 @@ const runActor = async () => {
               const rankingData = {
                 application_identifier: applicationIdentifier,
                 region: selectedCountry,
-                category_identifier: selectedCategory,
-                collection_identifier: selectedCollection,
+                category_identifier: category,
+                collection_identifier: collection,
                 rank: index+1,
+                
               }
               const supported_device_identifier =
                 await supabase.addSupportedDeviceToDatabase(
