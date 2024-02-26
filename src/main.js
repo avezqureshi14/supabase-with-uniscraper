@@ -30,7 +30,7 @@ const runActor = async () => {
         const apps = await storeInstance.listApps(input);
         const { selectedCollection, selectedCategory, platform } = input;
         await Promise.all(
-          apps?.map(async (app) => {
+          apps?.slice(0, num)?.map(async (app) => {
             try {
               const data = await storeInstance.getAppDetails({
                 appId: app?.id,
@@ -44,7 +44,7 @@ const runActor = async () => {
 
               if (!developer) {
                 const developerData = {
-                  developer_identifier:data.developerId,
+                  developer_identifier: data.developerId,
                   name: data.developer,
                   developer_url: data.developerUrl,
                   developer_website: data.developerWebsite,
@@ -59,9 +59,9 @@ const runActor = async () => {
                 current_version_reviews: data?.currentVersionReviews,
               };
               const supportedDeviceData = {
-                device_name:data?.supportedDevices
-              }
-              
+                device_name: data?.supportedDevices,
+              };
+
               const application = await createApplicationInDatabase({
                 application_identifier: data?.id,
                 title: data?.title,
@@ -95,10 +95,21 @@ const runActor = async () => {
               const applicationIdentifier = application?.application_identifier;
 
               // Step 3: Use the application identifier to create related records
-              const review_identifier = await addReviewToDatabase(applicationIdentifier, reviewData);
-              const supported_device_identifier = await addSupportedDeviceToDatabase(applicationIdentifier, supportedDeviceData);
+              const review_identifier = await addReviewToDatabase(
+                applicationIdentifier,
+                reviewData
+              );
+              const supported_device_identifier =
+                await addSupportedDeviceToDatabase(
+                  applicationIdentifier,
+                  supportedDeviceData
+                );
 
-              await updateApplication(applicationIdentifier,review_identifier,supported_device_identifier);
+              await updateApplication(
+                applicationIdentifier,
+                review_identifier,
+                supported_device_identifier
+              );
             } catch (error) {
               console.error(
                 `Error processing app details for appId: ${app?.id}`,
