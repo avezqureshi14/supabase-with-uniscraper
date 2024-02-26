@@ -22,7 +22,7 @@ const runActor = async () => {
         await Promise.all(
           apps?.map(async (app) => {
             try {
-              const data = await storeInstance.getAppDetails({ appId: app.id });
+              const data = await storeInstance.getAppDetails({ appId: app?.id });
 
               const category = await getCategoryFromDatabase(data.category); // Implement this function
               const collection = await getCollectionFromDatabase(
@@ -65,7 +65,7 @@ const runActor = async () => {
               
             } catch (error) {
               console.error(
-                `Error processing app details for appId: ${app.id}`,
+                `Error processing app details for appId: ${app?.id}`,
                 error
               );
               // Handle the error as needed
@@ -105,37 +105,3 @@ const runActor = async () => {
 };
 
 runActor();
-
-id;
-appId;
-title;
-url;
-description;
-icon;
-genres;
-genreIds;
-primaryGenre;
-primaryGenreId;
-contentRating;
-languages;
-size;
-requiredOsVersion;
-released;
-updated;
-releaseNotes;
-version;
-price;
-currency;
-free;
-developerId;
-developer;
-developerUrl;
-developerWebsite;
-score;
-reviews;
-currentVersionScore;
-currentVersionReviews;
-screenshots;
-ipadScreenshots;
-appletvScreenshots;
-supportedDevices;
