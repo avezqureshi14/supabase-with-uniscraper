@@ -7,7 +7,7 @@ const supabaseKey =
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Function to get a category from the database based on the category name
-const getCategoryFromDatabase = async (categoryName) => {
+export const getCategoryFromDatabase = async (categoryName) => {
   const { data, error } = await supabase
     .from("category")
     .select("*")
@@ -23,7 +23,7 @@ const getCategoryFromDatabase = async (categoryName) => {
 };
 
 // Function to get a collection from the database based on the collection name
-const getCollectionFromDatabase = async (collectionName) => {
+export const getCollectionFromDatabase = async (collectionName) => {
   const { data, error } = await supabase
     .from("collections")
     .select("*")
@@ -39,7 +39,7 @@ const getCollectionFromDatabase = async (collectionName) => {
 };
 
 // Function to get a developer from the database based on the developer name
-const getDeveloperFromDatabase = async (developerName) => {
+export const getDeveloperFromDatabase = async (developerName) => {
   const { data, error } = await supabase
     .from("developers")
     .select("*")
@@ -55,7 +55,7 @@ const getDeveloperFromDatabase = async (developerName) => {
 };
 
 // Function to create a new developer in the database
-const createDeveloperInDatabase = async (developerName) => {
+export const createDeveloperInDatabase = async (developerName) => {
   const { data, error } = await supabase
     .from("developers")
     .upsert([{ name: developerName }], { onConflict: ["name"] });
@@ -67,7 +67,7 @@ const createDeveloperInDatabase = async (developerName) => {
 };
 
 // Function to get a platform from the database based on the platform name
-const getPlatformFromDatabase = async (platformName) => {
+export const getPlatformFromDatabase = async (platformName) => {
   const { data, error } = await supabase
     .from("platforms")
     .select("*")
@@ -84,7 +84,7 @@ const getPlatformFromDatabase = async (platformName) => {
 
 
 // Function to create a new application in the database
-const createApplicationInDatabase = async (applicationData) => {
+export const createApplicationInDatabase = async (applicationData) => {
     const { data, error } = await supabase
       .from("applications")
       .upsert([applicationData], { onConflict: ["title"] });
@@ -97,7 +97,7 @@ const createApplicationInDatabase = async (applicationData) => {
     return data[0];
   };
   
-  const addReviewToDatabase = async (applicationId, reviewData) => {
+  export const addReviewToDatabase = async (applicationId, reviewData) => {
     const { data, error } = await supabase
       .from("reviews")
       .upsert([{ application_identifier: applicationId, ...reviewData }], {
@@ -113,7 +113,7 @@ const createApplicationInDatabase = async (applicationData) => {
   };
   
   // Function to add a screenshot to the database
-  const addScreenshotToDatabase = async (applicationId, screenshotData) => {
+  export const addScreenshotToDatabase = async (applicationId, screenshotData) => {
     const { data, error } = await supabase
       .from("screenshots")
       .upsert([{ application_identifier: applicationId, ...screenshotData }], {
@@ -129,7 +129,7 @@ const createApplicationInDatabase = async (applicationData) => {
   };
   
   // Function to add a supported device to the database
-  const addSupportedDeviceToDatabase = async (
+  export const addSupportedDeviceToDatabase = async (
     applicationId,
     supportedDeviceData
   ) => {
@@ -150,15 +150,5 @@ const createApplicationInDatabase = async (applicationData) => {
     return data[0];
   };
   
-  module.exports = {
-    getCategoryFromDatabase,
-    getCollectionFromDatabase,
-    getDeveloperFromDatabase,
-    createDeveloperInDatabase,
-    getPlatformFromDatabase,
-    createApplicationInDatabase,
-    addReviewToDatabase,
-    addScreenshotToDatabase,
-    addSupportedDeviceToDatabase,
-  };
+
   
