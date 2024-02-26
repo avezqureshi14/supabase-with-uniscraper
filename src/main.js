@@ -15,6 +15,7 @@ import {
   getCollectionFromDatabase,
   getDeveloperFromDatabase,
   getPlatformFromDatabase,
+  updateApplication,
 } from "./utility/supabase.js";
 
 const runActor = async () => {
@@ -60,8 +61,7 @@ const runActor = async () => {
               const supportedDeviceData = {
                 device_name:data?.supportedDevices
               }
-              const review_identifier = await addReviewToDatabase(data?.id,reviewData);
-              const supported_device_identifier = await addSupportedDeviceToDatabase(data?.id,supportedDeviceData)
+              
               const application = await createApplicationInDatabase({
                 application_identifier: data?.id,
                 title: data?.title,
@@ -86,12 +86,19 @@ const runActor = async () => {
                 iap_range: null,
                 developer_identifier: developer,
                 screenshot_identifier: null,
-                supported_device_identifier: supported_device_identifier,
-                review_identifier: review_identifier,
+                supported_device_identifier: null,
+                review_identifier: null,
                 platform_identifier: platformId,
                 category_identifier: category,
                 collection_identifier: collection,
               });
+              const applicationIdentifier = application?.application_identifier;
+
+              // Step 3: Use the application identifier to create related records
+              const review_identifier = await addReviewToDatabase(applicationIdentifier, reviewData);
+              const supported_device_identifier = await addSupportedDeviceToDatabase(applicationIdentifier, supportedDeviceData);
+
+              await updateApplication(applicationIdentifier,review_identifier,supported_device_identifier);
             } catch (error) {
               console.error(
                 `Error processing app details for appId: ${app?.id}`,

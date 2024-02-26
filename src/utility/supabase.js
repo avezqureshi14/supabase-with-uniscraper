@@ -38,11 +38,11 @@ export const getCollectionFromDatabase = async (collectionName) => {
 };
 
 // Function to get a developer from the database based on the developer name
-export const getDeveloperFromDatabase = async (developerName) => {
+export const getDeveloperFromDatabase = async (developer_identifier) => {
   const { data, error } = await supabase
     .from("developer")
     .select("*")
-    .eq("name", developerName)
+    .eq("developer_identifier", developer_identifier)
     .single();
 
   if (error) {
@@ -70,6 +70,9 @@ export const createDeveloperInDatabase = async (developerData) => {
     console.error("Error creating developer in database:", error);
     return null;
   }
+
+  return getDeveloperFromDatabase(developerData.developer_identifier);
+
 };
 
 // Function to get a platform from the database based on the platform name
@@ -180,6 +183,7 @@ export const getSupportedDeviceFromDatabase = async (application_identifier) => 
   return data.identifier;
 };
 
+
 // Function to add a supported device to the database
 export const addSupportedDeviceToDatabase = async (
   applicationId,
@@ -200,4 +204,26 @@ export const addSupportedDeviceToDatabase = async (
   }
 
   return getSupportedDeviceFromDatabase(applicationId);
+};
+
+
+export const updateApplication = async (
+  applicationId,
+  reviewId,
+  supportedDeviceId
+) => {
+  const { data, error } = await supabase
+    .from("application")
+    .update({
+      review_identifier: reviewId,
+      supported_device_identifier: supportedDeviceId,
+    })
+    .eq("application_identifier", applicationId);
+
+  if (error) {
+    console.error("Error updating application in database:", error);
+    return null;
+  }
+
+  return data;
 };
