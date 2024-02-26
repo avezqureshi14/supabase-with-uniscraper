@@ -39,10 +39,11 @@ const runActor = async () => {
               const collection = await getCollectionFromDatabase(
                 selectedCollection
               );
-              let developer = await getDeveloperFromDatabase(data.developer);
+              let developer = await getDeveloperFromDatabase(data.developerId);
 
               if (!developer) {
                 const developerData = {
+                  developer_identifier:data.developerId,
                   name: data.developer,
                   developer_url: data.developerUrl,
                   developer_website: data.developerWebsite,

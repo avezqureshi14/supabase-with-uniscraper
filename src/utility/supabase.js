@@ -50,7 +50,7 @@ export const getDeveloperFromDatabase = async (developerName) => {
     return null;
   }
 
-  return data.identifier;
+  return data.developer_identifier;
 };
 
 // Function to create a new developer in the database
@@ -59,6 +59,7 @@ export const createDeveloperInDatabase = async (developerData) => {
     .from("developer")
     .upsert([
       {
+        developer_identifier:developerData.developer_identifier,
         name: developerData.name,
         developer_url: developerData.developer_url,
         developer_website: developerData.developer_website
