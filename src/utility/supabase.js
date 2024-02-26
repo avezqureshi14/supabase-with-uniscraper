@@ -81,6 +81,20 @@ export const getPlatformFromDatabase = async (platformName) => {
 
   return data.identifier;
 };
+export const getApplicationFromDatabase = async (application_identifier) => {
+  const { data, error } = await supabase
+    .from("application")
+    .select("*")
+    .eq("application_identifier", application_identifier)
+    .single();
+
+  if (error) {
+    console.error("Error getting platform from database:", error);
+    return null;
+  }
+
+  return data;
+};
 
 
 // Function to create a new application in the database
@@ -93,8 +107,8 @@ export const createApplicationInDatabase = async (applicationData) => {
       console.error("Error creating application in database:", error);
       return null;
     }
-  
-    return data[0];
+    
+    return getApplicationFromDatabase(applicationData.application_identifier);
   };
   
   export const addReviewToDatabase = async (applicationId, reviewData) => {
