@@ -54,16 +54,14 @@ export const getDeveloperFromDatabase = async (developer_identifier) => {
 
 // Function to create a new developer in the database
 export const createDeveloperInDatabase = async (developerData) => {
-  const { data, error } = await supabase
-    .from("developer")
-    .upsert([
-      {
-        developer_identifier:developerData.developer_identifier,
-        name: developerData.name,
-        developer_url: developerData.developer_url,
-        developer_website: developerData.developer_website
-      },
-    ]);
+  const { data, error } = await supabase.from("developer").upsert([
+    {
+      developer_identifier: developerData.developer_identifier,
+      name: developerData.name,
+      developer_url: developerData.developer_url,
+      developer_website: developerData.developer_website,
+    },
+  ]);
 
   if (error) {
     console.error("Error creating developer in database:", error);
@@ -71,7 +69,6 @@ export const createDeveloperInDatabase = async (developerData) => {
   }
 
   return getDeveloperFromDatabase(developerData.developer_identifier);
-
 };
 
 // Function to get a platform from the database based on the platform name
@@ -118,7 +115,6 @@ export const createApplicationInDatabase = async (applicationData) => {
   return getApplicationFromDatabase(applicationData.application_identifier);
 };
 
-
 export const getReviewFromDatabase = async (application_identifier) => {
   const { data, error } = await supabase
     .from("review")
@@ -134,7 +130,6 @@ export const getReviewFromDatabase = async (application_identifier) => {
   return data.identifier;
 };
 
-
 export const addReviewToDatabase = async (applicationId, reviewData) => {
   const { data, error } = await supabase
     .from("review")
@@ -148,25 +143,9 @@ export const addReviewToDatabase = async (applicationId, reviewData) => {
   return getReviewFromDatabase(applicationId);
 };
 
-
-// Function to add a screenshot to the database
-export const addScreenshotToDatabase = async (
-  applicationId,
-  screenshotData
+export const getSupportedDeviceFromDatabase = async (
+  application_identifier
 ) => {
-  const { data, error } = await supabase
-    .from("screenshots")
-    .upsert([{ application_identifier: applicationId, ...screenshotData }], {
-      onConflict: ["application_identifier"],
-    });
-
-  if (error) {
-    console.error("Error adding screenshot to database:", error);
-    return null;
-  }
-};
-
-export const getSupportedDeviceFromDatabase = async (application_identifier) => {
   const { data, error } = await supabase
     .from("supported_device")
     .select("*")
@@ -181,7 +160,6 @@ export const getSupportedDeviceFromDatabase = async (application_identifier) => 
   return data.identifier;
 };
 
-
 // Function to add a supported device to the database
 export const addSupportedDeviceToDatabase = async (
   applicationId,
@@ -189,9 +167,9 @@ export const addSupportedDeviceToDatabase = async (
 ) => {
   const { data, error } = await supabase
     .from("supported_device")
-    .upsert(
-      [{ application_identifier: applicationId, ...supportedDeviceData }]
-    );
+    .upsert([
+      { application_identifier: applicationId, ...supportedDeviceData },
+    ]);
 
   if (error) {
     console.error("Error adding supported device to database:", error);
@@ -201,11 +179,43 @@ export const addSupportedDeviceToDatabase = async (
   return getSupportedDeviceFromDatabase(applicationId);
 };
 
+export const getScreenshotsFromDatabase = async (application_identifier) => {
+  const { data, error } = await supabase
+    .from("screenshot")
+    .select("*")
+    .eq("application_identifier", application_identifier)
+    .single();
+
+  if (error) {
+    console.error("Error getting screenshots from database:", error);
+    return null;
+  }
+
+  return data.identifier;
+};
+
+// Function to add a supported device to the database
+export const addScreenshotsToDatabase = async (
+  applicationId,
+  screenshotsData
+) => {
+  const { data, error } = await supabase
+    .from("screenshot")
+    .upsert([{ application_identifier: applicationId, ...screenshotsData }]);
+
+  if (error) {
+    console.error("Error adding screenshots  to database:", error);
+    return null;
+  }
+
+  return getScreenshotsFromDatabase(applicationId);
+};
 
 export const updateApplication = async (
   applicationId,
   reviewId,
-  supportedDeviceId
+  supportedDeviceId,
+  screenshotId
 ) => {
   // Check if the supportedDeviceId exists in the supported_device table
   const supportedDeviceExists = await supabase
@@ -215,7 +225,9 @@ export const updateApplication = async (
     .single();
 
   if (!supportedDeviceExists) {
-    console.error(`Supported device with ID ${supportedDeviceId} does not exist.`);
+    console.error(
+      `Supported device with ID ${supportedDeviceId} does not exist.`
+    );
     return null;
   }
 
@@ -225,6 +237,7 @@ export const updateApplication = async (
     .update({
       review_identifier: reviewId,
       supported_device_identifier: supportedDeviceId,
+      screenshot_identifier: screenshotId,
     })
     .eq("application_identifier", applicationId);
 
@@ -236,16 +249,11 @@ export const updateApplication = async (
   return data;
 };
 
-
 export const ranking = async (rankingData) => {
-  const { data, error } = await supabase
-    .from("rankings")
-    .upsert([rankingData]);
+  const { data, error } = await supabase.from("rankings").upsert([rankingData]);
 
   if (error) {
     console.error("Error adding rankings in database:", error);
     return null;
   }
 };
-
-

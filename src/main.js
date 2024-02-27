@@ -19,12 +19,17 @@ const runActor = async () => {
     switch (action) {
       case LIST_APPS: {
         const apps = await storeInstance.listApps(input);
-        const { selectedCollection, selectedCategory, platform,selectedCountry} = input;
+        const {
+          selectedCollection,
+          selectedCategory,
+          platform,
+          selectedCountry,
+        } = input;
         await Promise.all(
           apps?.slice(0, input.limit)?.map(async (app, index) => {
             try {
               const data = await storeInstance.getAppDetails({
-                appId: app?.id,
+                appId: platform === "APP_STORE" ? app?.id : app?.appId,
               });
 
               const category = await supabase.getCategoryFromDatabase(
@@ -41,7 +46,10 @@ const runActor = async () => {
                 const developerData = {
                   developer_identifier: data.developerId,
                   name: data.developer,
-                  developer_url: data.developerUrl,
+                  developer_url:
+                    platform === "APP_STORE"
+                      ? data.developerUrl
+                      : data.developerEmail,
                   developer_website: data.developerWebsite,
                 };
                 developer = await supabase.createDeveloperInDatabase(
@@ -68,21 +76,27 @@ const runActor = async () => {
                 description: data?.description,
                 icon: data?.icon,
                 content_rating: data?.contentRating,
-                languages: data?.languages,
-                size: data?.size,
-                required_os_version: data?.requiredOsVersion,
+                languages: data?.languages, //n
+                size: data?.size, //n
+                required_os_version:
+                  platform === "APP_STORE"
+                    ? data?.requiredOsVersion
+                    : data.androidVersion,
                 released: data?.released,
                 updated: data?.updated,
-                release_notes: data?.releaseNotes,
+                release_notes:
+                  platform === "APP_STORE"
+                    ? data?.releaseNotes
+                    : data.recentChanges,
                 version: data?.version,
                 price: data?.price,
                 currency: data?.currency,
                 free: data?.free,
-                has_iap: null,
-                has_ads: null,
-                installs: null,
+                has_iap: platform === "APP_STORE" ? null : data.offersIAP,
+                has_ads: platform === "APP_STORE" ? null : data.adSupported,
+                installs: platform === "APP_STORE" ? null : data.installs,
                 installs_range: null,
-                iap_range: null,
+                iap_range: platform === "APP_STORE" ? null : data.IAPRange,
                 developer_identifier: developer,
                 screenshot_identifier: null,
                 supported_device_identifier: null,
@@ -104,9 +118,20 @@ const runActor = async () => {
                 region: selectedRegion,
                 category_identifier: category,
                 collection_identifier: collection,
-                rank: index+1,
+                rank: index + 1,
+              };
+              const screenshotsData = {
+                application_identifier: applicationIdentifier,
+                mobile: data?.screenshots,
+                tablet: data?.ipadScreenshots,
+                tv: data?.appletvScreenshots,
+              };
+              const screenshot_identifier =
+                await supabase.addScreenshotsToDatabase(
+                  applicationIdentifier,
+                  screenshotsData
+                );
 
-              }
               const supported_device_identifier =
                 await supabase.addSupportedDeviceToDatabase(
                   applicationIdentifier,
@@ -116,7 +141,8 @@ const runActor = async () => {
               await supabase.updateApplication(
                 applicationIdentifier,
                 review_identifier,
-                supported_device_identifier
+                supported_device_identifier,
+                screenshot_identifier
               );
 
               await supabase.ranking(rankingData);
