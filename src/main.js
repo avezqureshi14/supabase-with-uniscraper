@@ -95,7 +95,7 @@ const runActor = async () => {
                 has_iap: platform === "APP_STORE" ? null : data.offersIAP,
                 has_ads: platform === "APP_STORE" ? null : data.adSupported,
                 installs: platform === "APP_STORE" ? null : data.installs,
-                installs_range: null,
+                installs_range:  platform === "APP_STORE" ? data?.installsRange : [data.minInstalls,data.maxInstalls],
                 iap_range: platform === "APP_STORE" ? null : data.IAPRange,
                 developer_identifier: developer,
                 screenshot_identifier: null,
