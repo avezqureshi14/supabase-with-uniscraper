@@ -27,11 +27,11 @@ const runActor = async () => {
         } = input;
         await Promise.all(
           apps?.slice(0, input.limit)?.map(async (app, index) => {
-            console.log(app?.appId + "hey apun idhar hai");
             try {
               const data = await storeInstance.getAppDetails({
                 appId: platform === "APP_STORE" ? app?.id : app?.appId,
               });
+              console.log(data.appId + "hey bhai");
 
               const category = await supabase.getCategoryFromDatabase(
                 selectedCategory
