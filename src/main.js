@@ -70,7 +70,8 @@ const runActor = async () => {
               };
 
               const application = await supabase.createApplicationInDatabase({
-                application_identifier: platform === "APP_STORE" ? data?.id : data?.appId ,
+                application_identifier:
+                  platform === "APP_STORE" ? data?.id : data?.appId,
                 title: data?.title,
                 url: data?.url,
                 description: data?.description,
@@ -95,7 +96,10 @@ const runActor = async () => {
                 has_iap: platform === "APP_STORE" ? null : data.offersIAP,
                 has_ads: platform === "APP_STORE" ? null : data.adSupported,
                 installs: platform === "APP_STORE" ? null : data.installs,
-                installs_range:  platform === "APP_STORE" ? data?.installsRange : [data.minInstalls,data.maxInstalls],
+                installs_range:
+                  platform === "APP_STORE"
+                    ? data?.installsRange
+                    : [data.minInstalls, data.maxInstalls],
                 iap_range: platform === "APP_STORE" ? null : data.IAPRange,
                 developer_identifier: developer,
                 screenshot_identifier: null,
@@ -106,12 +110,6 @@ const runActor = async () => {
                 collection_identifier: collection,
               });
               const applicationIdentifier = application?.application_identifier;
-
-              // Step 3: Use the application identifier to create related records
-              const review_identifier = await supabase.addReviewToDatabase(
-                applicationIdentifier,
-                reviewData
-              );
               const selectedRegion = countries[selectedCountry];
               const rankingData = {
                 application_identifier: applicationIdentifier,
@@ -126,26 +124,32 @@ const runActor = async () => {
                 tablet: data?.ipadScreenshots,
                 tv: data?.appletvScreenshots,
               };
-              const screenshot_identifier =
-                await supabase.addScreenshotsToDatabase(
+              if (applicationIdentifier) {
+                const review_identifier = await supabase.addReviewToDatabase(
                   applicationIdentifier,
-                  screenshotsData
+                  reviewData
+                );
+                const screenshot_identifier =
+                  await supabase.addScreenshotsToDatabase(
+                    applicationIdentifier,
+                    screenshotsData
+                  );
+
+                const supported_device_identifier =
+                  await supabase.addSupportedDeviceToDatabase(
+                    applicationIdentifier,
+                    supportedDeviceData
+                  );
+
+                await supabase.updateApplication(
+                  applicationIdentifier,
+                  review_identifier,
+                  supported_device_identifier,
+                  screenshot_identifier
                 );
 
-              const supported_device_identifier =
-                await supabase.addSupportedDeviceToDatabase(
-                  applicationIdentifier,
-                  supportedDeviceData
-                );
-
-              await supabase.updateApplication(
-                applicationIdentifier,
-                review_identifier,
-                supported_device_identifier,
-                screenshot_identifier
-              );
-
-              await supabase.ranking(rankingData);
+                await supabase.ranking(rankingData);
+              }
             } catch (error) {
               console.error(
                 `Error processing app details for appId: ${app?.id}`,
