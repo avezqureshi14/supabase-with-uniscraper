@@ -27,6 +27,7 @@ const runActor = async () => {
         } = input;
         await Promise.all(
           apps?.slice(0, input.limit)?.map(async (app, index) => {
+            console.log(app?.appId);
             try {
               const data = await storeInstance.getAppDetails({
                 appId: platform === "APP_STORE" ? app?.id : app?.appId,
