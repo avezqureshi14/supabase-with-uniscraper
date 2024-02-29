@@ -108,6 +108,9 @@ const runActor = async () => {
                 platform_identifier: platformId,
                 category_identifier: category,
                 collection_identifier: collection,
+                videoImage: platform === "APP_STORE" ? null : data.videoImage,
+                video: platform === "APP_STORE" ? null : data.video,
+
               });
               const applicationIdentifier = application?.application_identifier;
               const selectedRegion = countries[selectedCountry];
