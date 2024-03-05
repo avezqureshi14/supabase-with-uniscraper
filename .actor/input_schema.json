@@ -8,12 +8,7 @@
       "type": "string",
       "description": "Specify the action to perform, How do you want to Scrap the Data?",
       "editor": "select",
-      "enum": [
-        "LIST_APPS",
-        "LIST_DEVELOPER_APPS",
-        "GET_DETAILS",
-        "GET_REVIEWS"
-      ],
+      "enum": ["LIST_APPS", "LIST_DEVELOPER_APPS", "GET_DETAILS"],
       "default": "LIST_APPS"
     },
     "platform": {
@@ -21,10 +16,7 @@
       "type": "string",
       "description": "Choose the Platform needed to be scrapped",
       "editor": "select",
-      "enum": [
-        "GOOGLE_PLAY",
-        "APP_STORE"
-      ],
+      "enum": ["GOOGLE_PLAY", "APP_STORE"],
       "default": "GOOGLE_PLAY"
     },
     "appId": {
@@ -59,6 +51,7 @@
         "SOCIAL",
         "SPORTS",
         "WEATHER",
+        "GAMES",
         "GAMES_ACTION",
         "GAMES_ADVENTURE",
         "GAMES_ARCADE",
@@ -84,12 +77,10 @@
       "type": "string",
       "description": "Choose  Collection of App ",
       "editor": "select",
-      "enum": [
-        "TOP_FREE",
-        "TOP_PAID"
-      ],
+      "enum": ["TOP_FREE", "TOP_PAID"],
       "default": "TOP_FREE"
     },
+
     "selectedCountry": {
       "title": "Choose Country  (Works only if action choosen is  LIST_APPS)",
       "type": "string",
@@ -299,41 +290,8 @@
       "type": "string",
       "description": "Sort",
       "editor": "select",
-      "enum": [
-        "RECENT",
-        "HELPFUL"
-      ],
+      "enum": ["RECENT", "HELPFUL"],
       "default": "RECENT"
-    },
-    "sortReviewsBy": {
-      "title": "Sort Reviews",
-      "type": "string",
-      "description": "Sort",
-      "editor": "select",
-      "enum": [
-        "RECENT",
-        "HELPFUL",
-        "RATING"
-      ],
-      "default": "RECENT"
-    },
-    "reviewType": {
-      "title": "Type of Reviews (if rating is below 3 it is considered as a bad review and above 4 is considered as good review)",
-      "type": "string",
-      "description": "Review Type",
-      "editor": "select",
-      "enum": [
-        "GOOD",
-        "BAD"
-      ],
-      "default": "GOOD"
-    },
-    "numReviewsPages": {
-      "title": "Enter No. of Reviews for GOOGLE_PLAY (max: 3000) or Enter No. of Pages for APP_STORE (max : 10)",
-      "type": "integer",
-      "description": "Enter No. of Reviews for GOOGLE_PLAY (max: 3000) or Enter No. of Pages for APP_STORE (max : 10)",
-      "editor": "number",
-      "prefill": 10
     },
     "limit": {
       "title": "Number of results",
@@ -343,7 +301,5 @@
       "prefill": 10
     }
   },
-  "required": [
-    "action"
-  ]
+  "required": ["action"]
 }
