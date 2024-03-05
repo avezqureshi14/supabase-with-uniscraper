@@ -77,7 +77,7 @@ const runActor = async () => {
                 let good = false;
                 let bad = false;
 
-                reviews.forEach((item) => {
+                array.forEach((item) => {
                   id = item?.id;
                   userName = item?.userName;
                   userImage = platform === "APP_STORE" ? item?.userUrl : item?.userImage;
