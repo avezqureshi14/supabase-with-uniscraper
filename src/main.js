@@ -62,6 +62,8 @@ const runActor = async () => {
                 platform
               );
               let reviews = await storeInstance.getReviews(input);
+              console.log(reviews + " hey i am here reviews")
+
               const reviewData = async () => {
                 let id = null;
                 let userName = "";
@@ -88,7 +90,6 @@ const runActor = async () => {
                   bad = item?.score <= 3 ? true : false;
                 });
 
-                console.log(reviews + " hey i am here reviews")
                 console.log(reviewData + " hey i am here")
               };
 
