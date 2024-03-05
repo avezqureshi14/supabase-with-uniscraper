@@ -62,6 +62,7 @@ const runActor = async () => {
                 platform
               );
               let reviews = await storeInstance.getReviews(input);
+              console.log(Array.isArray(reviews))
               reviews?.forEach((item)=>{
                 console.log(item.id);
               })
