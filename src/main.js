@@ -62,7 +62,6 @@ const runActor = async () => {
                 platform
               );
               let reviews = await storeInstance.getReviews(input);
-              console.log(reviews + " hey i am here reviews")
 
               const reviewData = async () => {
                 let id = null;
