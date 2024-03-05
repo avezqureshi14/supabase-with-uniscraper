@@ -1,7 +1,6 @@
 import { Actor } from "apify";
 import {
   GET_DETAILS,
-  GOOGLE_PLAY,
   LIST_APPS,
   LIST_DEVELOPER_APPS,
 } from "./constants/actionTypes.js";
