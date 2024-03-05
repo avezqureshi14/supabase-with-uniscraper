@@ -1,6 +1,7 @@
 import { Actor } from "apify";
 import {
   GET_DETAILS,
+  GOOGLE_PLAY,
   LIST_APPS,
   LIST_DEVELOPER_APPS,
 } from "./constants/actionTypes.js";
@@ -60,11 +61,20 @@ const runActor = async () => {
               const platformId = await supabase.getPlatformFromDatabase(
                 platform
               );
-              const reviewData = {
-                score: data?.score,
-                current_version_score: data?.currentVersionScore,
-                current_version_reviews: data?.currentVersionReviews,
+              const reviewData = async() => {
+                let reviews = await storeInstance.getReviews(input);
+                let good;
+                let bad;
+                if (platform === GOOGLE_PLAY) {
+                  good = reviews?.data.filter(item => item?.score >= 4);
+                  bad = reviews?.data.filter(item => item?.score <= 3);
+                } else {
+                  good = reviews?.filter(item => item?.score >= 4);
+                  bad = reviews?.filter(item => item?.score <= 3);
+                }
+                return { good, bad };
               };
+
               const supportedDeviceData = {
                 device_name: data?.supportedDevices,
               };
@@ -101,6 +111,9 @@ const runActor = async () => {
                     ? data?.installsRange
                     : [data.minInstalls, data.maxInstalls],
                 iap_range: platform === "APP_STORE" ? null : data.IAPRange,
+                score: data?.score,
+                current_version_score: platform === "APP_STORE" ? null : data?.currentVersionScore,
+                current_version_reviews: platform === "APP_STORE" ? null : data?.currentVersionReviews,
                 developer_identifier: developer,
                 screenshot_identifier: null,
                 supported_device_identifier: null,

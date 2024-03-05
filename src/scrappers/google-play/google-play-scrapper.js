@@ -1,10 +1,23 @@
+import memoize from 'memoizee';
 import { ScraperInterface } from '../scrapper-interface.js';
 import { countries } from '../../constants/countries.js';
 import { gplayCategory } from './constants/category.js';
 import gplay from 'google-play-scraper';
 import { gplaySort } from '../google-play/constants/sort.js';
+import { mapToGPlaySortValue } from './constants/helper-gplay.js';
 
 export class GooglePlayStore extends ScraperInterface {
+  constructor() {
+    super();
+
+    // Iterate through class methods and memoize them
+    Object.getOwnPropertyNames(GooglePlayStore.prototype).forEach((methodName) => {
+      if (typeof this[methodName] === 'function' && methodName !== 'constructor') {
+        this[methodName] = memoize(this[methodName].bind(this), { promise: true });
+      }
+    });
+  }
+
   async listApps({
     selectedCollection,
     selectedCategory,
@@ -15,14 +28,13 @@ export class GooglePlayStore extends ScraperInterface {
     const playStoreCollection = selectedCollection;
     const playStoreCountry = countries[selectedCountry];
     const sort = gplaySort[selectedSort];
-    const allApps = gplay.list({
+
+    return gplay.list({
       category: playStoreCategory,
       collection: playStoreCollection,
       country: playStoreCountry,
       sort: sort,
     });
-
-    return allApps;
   }
 
   async listDeveloperApps({ devId }) {
@@ -30,6 +42,20 @@ export class GooglePlayStore extends ScraperInterface {
   }
 
   async getAppDetails({ appId }) {
-    return await gplay.app({ appId });
+    return gplay.app({ appId });
   }
+
+  async getReviews({ appId, sortReviewsBy, numReviews }) {
+  
+    // Map playStoreReviewSort to the corresponding gplay sort value
+    const gplaySortValue = mapToGPlaySortValue(sortReviewsBy);
+  
+    return gplay.reviews({
+      appId: appId,
+      sort: gplaySortValue,
+      num: numReviews,
+    });
+  }
+  
+  
 }
