@@ -87,6 +87,9 @@ const runActor = async () => {
                   good = item?.score >= 4 ? true : false;
                   bad = item?.score <= 3 ? true : false;
                 });
+
+                console.log(reviews + " hey i am here reviews")
+                console.log(reviewData + " hey i am here")
               };
 
 
