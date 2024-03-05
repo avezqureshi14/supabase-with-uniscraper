@@ -61,19 +61,34 @@ const runActor = async () => {
               const platformId = await supabase.getPlatformFromDatabase(
                 platform
               );
-              const reviewData = async() => {
-                let reviews = await storeInstance.getReviews(input);
-                let good;
-                let bad;
-                if (platform === GOOGLE_PLAY) {
-                  good = reviews?.data.filter(item => item?.score >= 4);
-                  bad = reviews?.data.filter(item => item?.score <= 3);
-                } else {
-                  good = reviews?.filter(item => item?.score >= 4);
-                  bad = reviews?.filter(item => item?.score <= 3);
-                }
-                return { good, bad };
+              let reviews = await storeInstance.getReviews(input);
+              const reviewData = async () => {
+                let id = null;
+                let userName = "";
+                let userImage = "";
+                let score = "";
+                let url = "";
+                let title = "";
+                let text = "";
+                let version = "";
+                let good = false;
+                let bad = false;
+
+                reviews.forEach((item) => {
+                  id = item?.id;
+                  userName = item?.userName;
+                  userImage = platform === "APP_STORE" ? item?.userUrl : item?.userImage;
+                  score = item?.score;
+                  url = item?.url;
+                  title = item?.title;
+                  text = item?.text;
+                  version = item?.version;
+
+                  good = item?.score >= 4 ? true : false;
+                  bad = item?.score <= 3 ? true : false;
+                });
               };
+
 
               const supportedDeviceData = {
                 device_name: data?.supportedDevices,
