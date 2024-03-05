@@ -61,11 +61,9 @@ const runActor = async () => {
               const platformId = await supabase.getPlatformFromDatabase(
                 platform
               );
+              const array = [];
               let reviews = await storeInstance.getReviews(input);
-              console.log(Array.isArray(reviews))
-              reviews?.forEach((item)=>{
-                console.log(item.id);
-              })
+              array.push(reviews);
               const reviewData = async () => {
                 let id = null;
                 let userName = "";
