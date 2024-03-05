@@ -250,10 +250,10 @@ export const updateApplication = async (
 };
 
 export const ranking = async (rankingData) => {
-  const { data, error } = await supabase.from("rankings").upsert([rankingData]);
+  const { data, error } = await supabase.from("ranking").upsert([rankingData]);
 
   if (error) {
-    console.error("Error adding rankings in database:", error);
+    console.error("Error adding ranking in database:", error);
     return null;
   }
 };
