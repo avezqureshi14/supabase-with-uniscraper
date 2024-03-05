@@ -64,7 +64,7 @@ const runActor = async () => {
               let reviews = await storeInstance.getReviews(input);
               array.push(reviews);
               array.map((item)=>{
-                  console.log(item.data[0].text);
+                  console.log(item.data[0].text + item.data[0].userName);
               })
               const reviewData = {
 
