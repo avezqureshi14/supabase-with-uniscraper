@@ -60,54 +60,12 @@ const runActor = async () => {
               const platformId = await supabase.getPlatformFromDatabase(
                 platform
               );
-              const array = [];
+
               let reviews = await storeInstance.getReviews(input);
-              array.push(...reviews);
-              
-              array.forEach((item) => {
-                let id = item?.id; // Declare id here
-                let userName = item?.userName;
-                let userImage = platform === "APP_STORE" ? item?.userUrl : item?.userImage;
-                let score = item?.score;
-                let url = item?.url;
-                let title = item?.title;
-                let text = item?.text;
-                let version = item?.version;
-                let good = item?.score >= 4 ? true : false;
-                let bad = item?.score <= 3 ? true : false;
-              
-                console.log(item?.userName);
-              });
-              const reviewData = async () => {
-                let id = null;
-                let userName = "";
-                let userImage = "";
-                let score = "";
-                let url = "";
-                let title = "";
-                let text = "";
-                let version = "";
-                let good = false;
-                let bad = false;
+              console.log(Array.isArray(reviews));
+              const reviewData = {
 
-                array.forEach((item) => {
-                  id = item?.id;
-                  userName = item?.userName;
-                  userImage = platform === "APP_STORE" ? item?.userUrl : item?.userImage;
-                  score = item?.score;
-                  url = item?.url;
-                  title = item?.title;
-                  text = item?.text;
-                  version = item?.version;
-
-                  good = item?.score >= 4 ? true : false;
-                  bad = item?.score <= 3 ? true : false;
-                });
-
-                console.log(reviewData + " hey i am here")
               };
-
-
               const supportedDeviceData = {
                 device_name: data?.supportedDevices,
               };
@@ -145,8 +103,8 @@ const runActor = async () => {
                     : [data.minInstalls, data.maxInstalls],
                 iap_range: platform === "APP_STORE" ? null : data.IAPRange,
                 score: data?.score,
-                currentVersionScore: platform === "APP_STORE" ? null : data?.currentVersionScore,
-                currentVersionReviews: platform === "APP_STORE" ? null : data?.currentVersionReviews,
+                currentVersionScore: platform === "APP_STORE" ? data.currentVersionScore : null,
+                currentVersionReviews: platform === "APP_STORE" ? data.currentVersionReviews : null,
                 developer_identifier: developer,
                 screenshot_identifier: null,
                 supported_device_identifier: null,
@@ -156,7 +114,6 @@ const runActor = async () => {
                 collection_identifier: collection,
                 videoImage: platform === "APP_STORE" ? null : data.videoImage,
                 video: platform === "APP_STORE" ? null : data.video,
-
               });
               const applicationIdentifier = application?.application_identifier;
               const selectedRegion = countries[selectedCountry];
