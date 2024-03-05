@@ -62,21 +62,21 @@ const runActor = async () => {
               );
               const array = [];
               let reviews = await storeInstance.getReviews(input);
-              array.push(reviews);
+              array.push(...reviews);
+              
               array.forEach((item) => {
-                id = item?.id;
-                userName = item?.userName;
-                userImage = platform === "APP_STORE" ? item?.userUrl : item?.userImage;
-                score = item?.score;
-                url = item?.url;
-                title = item?.title;
-                text = item?.text;
-                version = item?.version;
-
-                good = item?.score >= 4 ? true : false;
-                bad = item?.score <= 3 ? true : false;
-
-                console.log(item?.userName)
+                let id = item?.id; // Declare id here
+                let userName = item?.userName;
+                let userImage = platform === "APP_STORE" ? item?.userUrl : item?.userImage;
+                let score = item?.score;
+                let url = item?.url;
+                let title = item?.title;
+                let text = item?.text;
+                let version = item?.version;
+                let good = item?.score >= 4 ? true : false;
+                let bad = item?.score <= 3 ? true : false;
+              
+                console.log(item?.userName);
               });
               const reviewData = async () => {
                 let id = null;
