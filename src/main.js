@@ -117,9 +117,9 @@ const runActor = async () => {
               let review = await storeInstance.getReviews(applicationIdentifier, sortReviewsBy, numReviews);
               reviews.push(review);
               
-              const reviewData = {good:[],bad:[]};
-              let goodReviews = [];
-              let badReviews = [];
+              const reviewData = {};
+              let good = [];
+              let bad = [];
               
               if (platform === GOOGLE_PLAY) {
                 reviews.forEach((item) => {
