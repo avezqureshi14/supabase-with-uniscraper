@@ -1,5 +1,6 @@
 import { Actor } from "apify";
 import {
+  APP_STORE,
   GET_DETAILS,
   GOOGLE_PLAY,
   LIST_APPS,
@@ -122,6 +123,17 @@ const runActor = async () => {
               let badReviews = [];
               
               if (platform === GOOGLE_PLAY) {
+                reviews.forEach((item) => {
+                  item.data.forEach((i) => {
+                    if (i.score >= 4) {
+                      goodReviews.push(i.text);
+                    } else if (i.score <= 3) {
+                      badReviews.push(i.text);
+                    }
+                  });
+                });
+              }
+              else if (platform === APP_STORE) {
                 reviews.forEach((item) => {
                   item.data.forEach((i) => {
                     if (i.score >= 4) {
