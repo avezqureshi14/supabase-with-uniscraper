@@ -1,6 +1,7 @@
 import { Actor } from "apify";
 import {
   GET_DETAILS,
+  GOOGLE_PLAY,
   LIST_APPS,
   LIST_DEVELOPER_APPS,
 } from "./constants/actionTypes.js";
@@ -110,19 +111,30 @@ const runActor = async () => {
                 video: platform === "APP_STORE" ? null : data.video,
               });
               const applicationIdentifier = application?.application_identifier;
-              const array = [];
+              const reviews = [];
               // appId, sortReviewsBy, numReviews
               const { sortReviewsBy, numReviews } = input;
-              let reviews = await storeInstance.getReviews(applicationIdentifier, sortReviewsBy, numReviews);
-              array.push(reviews);
-              array.map((item, index) => {
-                item.data.map((myR, myI) => {
-                  console.log(myR.text);
-                })
-              })
-              const reviewData = {
-
-              };
+              let review = await storeInstance.getReviews(applicationIdentifier, sortReviewsBy, numReviews);
+              reviews.push(review);
+              
+              const reviewData = {};
+              let goodReviews = [];
+              let badReviews = [];
+              
+              if (platform === GOOGLE_PLAY) {
+                reviews.forEach((item) => {
+                  item.data.forEach((i) => {
+                    if (i.score >= 4) {
+                      good.push(i.text);
+                    } else if (i.score <= 3) {
+                      bad.push(i.text);
+                    }
+                  });
+                });
+              }
+              reviewData.good = goodReviews;
+              reviewData.bad = badReviews;
+              
               const selectedRegion = countries[selectedCountry];
               const rankingData = {
                 application_identifier: applicationIdentifier,
