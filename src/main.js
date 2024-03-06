@@ -66,6 +66,9 @@ const runActor = async () => {
               array.map((item,index)=>{
                 console.log(index);
                 console.log(item.data[index].text);
+                item.data.map((myR,myI)=>{
+                  console.log(myR);
+                })
               })
               const reviewData = {
 
