@@ -34,7 +34,6 @@ const runActor = async () => {
                 appId: platform === "APP_STORE" ? app?.id : app?.appId,
                 
               });
-              console.log(app.id)
               const category = await supabase.getCategoryFromDatabase(
                 selectedCategory
               );
@@ -136,7 +135,7 @@ const runActor = async () => {
               }
               else if (platform === APP_STORE) {
                 reviews.forEach((item) => {
-                  item.data.forEach((i) => {
+                  item.forEach((i) => {
                     if (i.score >= 4) {
                       goodReviews.push(i.text);
                     } else if (i.score <= 3) {
