@@ -1,6 +1,7 @@
 import store from 'app-store-scraper';
 
 export const  mapToStoreSortValue = (reviewSort) => {
+  console.log(reviewSort + " from map")
     switch (reviewSort) {
       case 'RECENT':
         return store.sort.RECENT;

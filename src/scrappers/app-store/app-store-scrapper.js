@@ -29,7 +29,7 @@ export class AppStore extends ScraperInterface {
     const appStoreCountry = countries[selectedCountry];
     const sort = appStoreSort[selectedSort];
 
-    const allApps = await store.list({
+    const allApps = store.list({
       category: appStoreCategory,
       collection: appStoreCollection,
       country: appStoreCountry,
@@ -42,11 +42,11 @@ export class AppStore extends ScraperInterface {
   }
 
   async listDeveloperApps({ devId }) {
-    return await store.developer({ devId });
+    return store.developer({ devId });
   }
 
   async getAppDetails({ appId }) {
-    return await store.app({ id: appId });
+    return store.app({ id: appId });
   }
 
   async getReviews(appId, sortReviewsBy, numReviewsPages ) {

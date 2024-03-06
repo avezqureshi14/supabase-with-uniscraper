@@ -32,8 +32,9 @@ const runActor = async () => {
             try {
               const data = await storeInstance.getAppDetails({
                 appId: platform === "APP_STORE" ? app?.id : app?.appId,
+                
               });
-
+              console.log(app.id)
               const category = await supabase.getCategoryFromDatabase(
                 selectedCategory
               );
