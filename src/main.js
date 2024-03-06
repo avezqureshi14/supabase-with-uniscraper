@@ -60,17 +60,6 @@ const runActor = async () => {
               const platformId = await supabase.getPlatformFromDatabase(
                 platform
               );
-              const array = [];
-              let reviews = await storeInstance.getReviews(input);
-              array.push(reviews);
-              array.map((item,index)=>{
-                item.data.map((myR,myI)=>{
-                  console.log(myR.text);
-                })
-              })
-              const reviewData = {
-
-              };
               const supportedDeviceData = {
                 device_name: data?.supportedDevices,
               };
@@ -121,6 +110,19 @@ const runActor = async () => {
                 video: platform === "APP_STORE" ? null : data.video,
               });
               const applicationIdentifier = application?.application_identifier;
+              const array = [];
+              // appId, sortReviewsBy, numReviews
+              const { sortReviewsBy, numReviews } = input;
+              let reviews = await storeInstance.getReviews(applicationIdentifier, sortReviewsBy, numReviews);
+              array.push(reviews);
+              array.map((item, index) => {
+                item.data.map((myR, myI) => {
+                  console.log(myR.text);
+                })
+              })
+              const reviewData = {
+
+              };
               const selectedRegion = countries[selectedCountry];
               const rankingData = {
                 application_identifier: applicationIdentifier,
