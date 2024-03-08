@@ -32,7 +32,7 @@ const runActor = async () => {
             try {
               const data = await storeInstance.getAppDetails({
                 appId: platform === "APP_STORE" ? app?.id : app?.appId,
-                
+
               });
               const category = await supabase.getCategoryFromDatabase(
                 selectedCategory
@@ -117,11 +117,11 @@ const runActor = async () => {
               const { sortReviewsBy, numReviews } = input;
               let review = await storeInstance.getReviews(applicationIdentifier, sortReviewsBy, numReviews);
               reviews.push(review);
-              
-              const reviewData = {good:[],bad:[]};
+
+              const reviewData = { good: [], bad: [] };
               let goodReviews = [];
               let badReviews = [];
-              
+
               if (platform === GOOGLE_PLAY) {
                 reviews.forEach((item) => {
                   item.data.forEach((i) => {
@@ -146,7 +146,7 @@ const runActor = async () => {
               }
               reviewData.good = goodReviews;
               reviewData.bad = badReviews;
-              
+
               const selectedRegion = countries[selectedCountry];
               const rankingData = {
                 application_identifier: applicationIdentifier,
@@ -186,6 +186,10 @@ const runActor = async () => {
                 );
 
                 await supabase.ranking(rankingData);
+                data?.screenshots.map((item) => {
+                  console.log(item);
+                  // await supabase.uploadImageToSupabase()
+                })
               }
             } catch (error) {
               console.error(

@@ -257,3 +257,21 @@ export const ranking = async (rankingData) => {
     return null;
   }
 };
+
+
+export const uploadImageToSupabase = async (imageUrl, imageName) => {
+  const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+  const buffer = Buffer.from(response.data, 'binary');
+
+  const { data, error } = await supabase.storage
+    .from('screenshot') // Replace with your bucket name
+    .upload(imageName, buffer, { cacheControl: '3600' });
+
+  if (error) {
+    console.error('Error uploading image:', error.message);
+  } else {
+    console.log('Image uploaded successfully:', data.Key);
+  }
+}
+
+
