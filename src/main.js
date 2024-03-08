@@ -161,6 +161,7 @@ const runActor = async () => {
                 tablet: data?.ipadScreenshots,
                 tv: data?.appletvScreenshots,
               };
+              console.log("hey");
               data?.screenshots.map((item) => {
                 console.log(item + " hey");
                 // await supabase.uploadImageToSupabase()
