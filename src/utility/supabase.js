@@ -4,7 +4,7 @@ const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqdml4dnh4dmp1Y21uZGR6dGlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc4MzY4MzEsImV4cCI6MjAyMzQxMjgzMX0.fiSiIflKB14U3yJeZ83-nwksOdm58TnlDWcaquHAnVQ";
 
 const supabase = createClient(supabaseUrl, supabaseKey);
-const axios = require("axios")
+import axios from "axios";
 // Function to get a category from the database based on the category name
 export const getCategoryFromDatabase = async (categoryName) => {
   const { data, error } = await supabase
