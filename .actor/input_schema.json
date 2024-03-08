@@ -3,19 +3,6 @@
   "type": "object",
   "schemaVersion": 1,
   "properties": {
-    "action": {
-      "title": "Action to perform",
-      "type": "string",
-      "description": "Specify the action to perform, How do you want to Scrap the Data?",
-      "editor": "select",
-      "enum": [
-        "LIST_APPS",
-        "LIST_DEVELOPER_APPS",
-        "GET_DETAILS",
-        "GET_REVIEWS"
-      ],
-      "default": "LIST_APPS"
-    },
     "platform": {
       "title": "Choose the Platform",
       "type": "string",
