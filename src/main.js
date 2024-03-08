@@ -161,6 +161,10 @@ const runActor = async () => {
                 tablet: data?.ipadScreenshots,
                 tv: data?.appletvScreenshots,
               };
+              data?.screenshots.map((item) => {
+                console.log(item + " hey");
+                // await supabase.uploadImageToSupabase()
+              })
               if (applicationIdentifier) {
                 const review_identifier = await supabase.addReviewToDatabase(
                   applicationIdentifier,
@@ -186,10 +190,6 @@ const runActor = async () => {
                 );
 
                 await supabase.ranking(rankingData);
-                data?.screenshots.map((item) => {
-                  console.log(item);
-                  // await supabase.uploadImageToSupabase()
-                })
               }
             } catch (error) {
               console.error(
