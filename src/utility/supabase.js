@@ -266,7 +266,9 @@ export const uploadImageToSupabase = async (imageUrl, imageName) => {
 
     const { data, error } = await supabase.storage
       .from('screenshot') // Replace with your actual bucket name
-      .insert(imageName, buffer, { cacheControl: '3600' });
+      .createObject(imageName, buffer, {
+        metadata: { cacheControl: '3600' },
+      });
 
     if (error) {
       throw new Error(`Error uploading image: ${error.message}`);
