@@ -38,7 +38,6 @@ export const addApplication = async (data, platform, developer, category, collec
     });
 };
 
-
 export const addDeveloper = async (data, platform) => {
     const developer = await supabase.getDeveloperFromDatabase(data.developerId);
 
@@ -97,7 +96,6 @@ export const addReviews = async (storeInstance, applicationIdentifier, platform,
     return review_identifier
 };
 
-
 export const addRanking = async (applicationIdentifier, selectedRegion, category, collection, index) => {
     const rankingData = {
         application_identifier: applicationIdentifier,
@@ -108,4 +106,16 @@ export const addRanking = async (applicationIdentifier, selectedRegion, category
     };
 
     await supabase.ranking(rankingData);
+};
+
+export const addScreenshots = async (applicationIdentifier, data) => {
+    const screenshotsData = {
+        application_identifier: applicationIdentifier,
+        mobile: data?.screenshots,
+        tablet: data?.ipadScreenshots,
+        tv: data?.appletvScreenshots,
+    };
+
+    const screenshotIdentifier = await supabase.addScreenshotsToDatabase(applicationIdentifier, screenshotsData);
+    return screenshotIdentifier;
 };

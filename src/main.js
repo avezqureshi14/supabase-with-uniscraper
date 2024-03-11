@@ -10,7 +10,7 @@ import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import * as supabase from "./utility/supabase.js";
 import { countries } from "./constants/countries.js";
-import { addApplication, addDeveloper, addRanking, addReviews } from "./utility/databaseUtils.js";
+import { addApplication, addDeveloper, addRanking, addReviews, addScreenshots } from "./utility/databaseUtils.js";
 
 const runActor = async () => {
   try {
@@ -54,27 +54,9 @@ const runActor = async () => {
               const application = await addApplication(data, platform, developer, category, collection, platformId);
               const applicationIdentifier = application?.application_identifier;
               const selectedRegion = countries[selectedCountry];
-              const rankingData = {
-                application_identifier: applicationIdentifier,
-                region: selectedRegion,
-                category_identifier: category,
-                collection_identifier: collection,
-                rank: index + 1,
-              };
-              const screenshotsData = {
-                application_identifier: applicationIdentifier,
-                mobile: data?.screenshots,
-                tablet: data?.ipadScreenshots,
-                tv: data?.appletvScreenshots,
-              };
               if (applicationIdentifier) {
                 const review_identifier = await addReviews(storeInstance, applicationIdentifier, platform, sortReviewsBy, numReviews);
-                const screenshot_identifier =
-                  await supabase.addScreenshotsToDatabase(
-                    applicationIdentifier,
-                    screenshotsData
-                  );
-
+                const screenshot_identifier = await addScreenshots(applicationIdentifier, data)
                 const supported_device_identifier =
                   await supabase.addSupportedDeviceToDatabase(
                     applicationIdentifier,
