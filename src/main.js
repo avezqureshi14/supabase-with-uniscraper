@@ -26,7 +26,7 @@ const runActor = async () => {
           selectedCollection,
           selectedCategory,
           platform,
-          selectedCountry,
+          selectedCountry, sortReviewsBy, numReviews
         } = input;
         await Promise.all(
           apps?.slice(0, input.limit)?.map(async (app, index) => {
