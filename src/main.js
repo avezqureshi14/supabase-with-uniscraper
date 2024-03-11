@@ -146,9 +146,6 @@ const runActor = async () => {
                 );
 
                 await supabase.ranking(rankingData);
-                for (const item of data?.screenshots) {
-                  await supabase.uploadImageToSupabase(item, item);
-                }
               }
             } catch (error) {
               console.error(
