@@ -5,7 +5,16 @@ const supabaseKey =
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 import axios from "axios";
-// Function to get a category from the database based on the category name
+import { logError } from "./logError";
+
+const handleSupabaseResponse = (response, message) => {
+  if (response.error) {
+    return logError(response.error, message);
+  }
+  return response.data;
+};
+
+
 export const getCategoryFromDatabase = async (categoryName) => {
   const { data, error } = await supabase
     .from("category")

@@ -10,7 +10,7 @@ import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import * as supabase from "./utility/supabase.js";
 import { countries } from "./constants/countries.js";
-import { addApplication, addDeveloper, addRanking, addReviews, addScreenshots } from "./utility/databaseUtils.js";
+import * as operation from "./utility/operations.js";
 
 const runActor = async () => {
   try {
@@ -28,49 +28,26 @@ const runActor = async () => {
           platform,
           selectedCountry, sortReviewsBy, numReviews
         } = input;
+        const selectedRegion = countries[selectedCountry];
         await Promise.all(
           apps?.slice(0, input.limit)?.map(async (app, index) => {
 
             try {
-              console.log("hey i am avez")
-              const data = await storeInstance.getAppDetails({
-                appId: platform === "APP_STORE" ? app?.id : app?.appId,
+              const data = await storeInstance.getAppDetails({ appId: platform === "APP_STORE" ? app?.id : app?.appId, });
+              const category = await supabase.getCategoryFromDatabase(selectedCategory);
+              const collection = await supabase.getCollectionFromDatabase(selectedCollection);
+              const platformId = await supabase.getPlatformFromDatabase(platform);
 
-              });
-              const category = await supabase.getCategoryFromDatabase(
-                selectedCategory
-              );
-              const collection = await supabase.getCollectionFromDatabase(
-                selectedCollection
-              );
-              const developer = await addDeveloper(data, platform);
-              const platformId = await supabase.getPlatformFromDatabase(
-                platform
-              );
-              const supportedDeviceData = {
-                device_name: data?.supportedDevices,
-              };
-
-              const application = await addApplication(data, platform, developer, category, collection, platformId);
+              const developer = await operation.addDeveloper(data, platform);
+              const application = await operation.addApplication(data, platform, developer, category, collection, platformId);
               const applicationIdentifier = application?.application_identifier;
-              const selectedRegion = countries[selectedCountry];
+
               if (applicationIdentifier) {
-                const review_identifier = await addReviews(storeInstance, applicationIdentifier, platform, sortReviewsBy, numReviews);
-                const screenshot_identifier = await addScreenshots(applicationIdentifier, data)
-                const supported_device_identifier =
-                  await supabase.addSupportedDeviceToDatabase(
-                    applicationIdentifier,
-                    supportedDeviceData
-                  );
-
-                await supabase.updateApplication(
-                  applicationIdentifier,
-                  review_identifier,
-                  supported_device_identifier,
-                  screenshot_identifier
-                );
-
-                await addRanking(applicationIdentifier, selectedRegion, category, collection, index);
+                const review_identifier = await operation.addReviews(storeInstance, applicationIdentifier, platform, sortReviewsBy, numReviews);
+                const screenshot_identifier = await operation.addScreenshots(applicationIdentifier, data)
+                const supported_device_identifier = await operation.addSupportedDevice(applicationIdentifier, data);
+                await supabase.updateApplication(applicationIdentifier, review_identifier, supported_device_identifier, screenshot_identifier);
+                await operation.addRanking(applicationIdentifier, selectedRegion, category, collection, index);
               }
             } catch (error) {
               console.error(

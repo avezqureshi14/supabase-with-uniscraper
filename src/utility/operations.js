@@ -119,3 +119,12 @@ export const addScreenshots = async (applicationIdentifier, data) => {
     const screenshotIdentifier = await supabase.addScreenshotsToDatabase(applicationIdentifier, screenshotsData);
     return screenshotIdentifier;
 };
+
+export const addSupportedDevice = async (applicationIdentifier, data) => {
+    const supportedDeviceData = {
+        device_name: data?.supportedDevices,
+    };
+
+    const supportedDeviceIdentifier = await supabase.addSupportedDeviceToDatabase(applicationIdentifier, supportedDeviceData);
+    return supportedDeviceIdentifier;
+};
