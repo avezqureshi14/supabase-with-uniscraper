@@ -54,3 +54,42 @@ export const addDeveloper = async (data, platform) => {
 
     return developer;
 };
+
+export const addReviews = async (storeInstance, applicationIdentifier, platform, sortReviewsBy, numReviews) => {
+    const reviews = [];
+
+    // appId, sortReviewsBy, numReviews
+    const review = await storeInstance.getReviews(applicationIdentifier, sortReviewsBy, numReviews);
+    reviews.push(review);
+
+    const reviewData = { good: [], bad: [] };
+    let goodReviews = [];
+    let badReviews = [];
+
+    if (platform === "GOOGLE_PLAY") {
+        reviews.forEach((item) => {
+            item.data.forEach((i) => {
+                if (i.score >= 4) {
+                    goodReviews.push(i.text);
+                } else if (i.score <= 3) {
+                    badReviews.push(i.text);
+                }
+            });
+        });
+    } else if (platform === "APP_STORE") {
+        reviews.forEach((item) => {
+            item.forEach((i) => {
+                if (i.score >= 4) {
+                    goodReviews.push(i.text);
+                } else if (i.score <= 3) {
+                    badReviews.push(i.text);
+                }
+            });
+        });
+    }
+
+    reviewData.good = goodReviews;
+    reviewData.bad = badReviews;
+
+    return reviewData;
+};

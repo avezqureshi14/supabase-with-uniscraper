@@ -10,7 +10,7 @@ import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import * as supabase from "./utility/supabase.js";
 import { countries } from "./constants/countries.js";
-import { addApplication, addDeveloper } from "./utility/databaseUtils.js";
+import { addApplication, addDeveloper, addReviews } from "./utility/databaseUtils.js";
 
 const runActor = async () => {
   try {
@@ -53,40 +53,7 @@ const runActor = async () => {
 
               const application = await addApplication(data, platform, developer, category, collection, platformId);
               const applicationIdentifier = application?.application_identifier;
-              const reviews = [];
-              // appId, sortReviewsBy, numReviews
-              const { sortReviewsBy, numReviews } = input;
-              let review = await storeInstance.getReviews(applicationIdentifier, sortReviewsBy, numReviews);
-              reviews.push(review);
-
-              const reviewData = { good: [], bad: [] };
-              let goodReviews = [];
-              let badReviews = [];
-
-              if (platform === GOOGLE_PLAY) {
-                reviews.forEach((item) => {
-                  item.data.forEach((i) => {
-                    if (i.score >= 4) {
-                      goodReviews.push(i.text);
-                    } else if (i.score <= 3) {
-                      badReviews.push(i.text);
-                    }
-                  });
-                });
-              }
-              else if (platform === APP_STORE) {
-                reviews.forEach((item) => {
-                  item.forEach((i) => {
-                    if (i.score >= 4) {
-                      goodReviews.push(i.text);
-                    } else if (i.score <= 3) {
-                      badReviews.push(i.text);
-                    }
-                  });
-                });
-              }
-              reviewData.good = goodReviews;
-              reviewData.bad = badReviews;
+              const reviewData = await addReviews(storeInstance, applicationIdentifier, platform, sortReviewsBy, numReviews);
               const selectedRegion = countries[selectedCountry];
               const rankingData = {
                 application_identifier: applicationIdentifier,
