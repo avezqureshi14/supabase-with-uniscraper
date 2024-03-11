@@ -90,6 +90,22 @@ export const addReviews = async (storeInstance, applicationIdentifier, platform,
 
     reviewData.good = goodReviews;
     reviewData.bad = badReviews;
+    const review_identifier = await supabase.addReviewToDatabase(
+        applicationIdentifier,
+        reviewData
+    );
+    return review_identifier
+};
 
-    return reviewData;
+
+export const addRanking = async (applicationIdentifier, selectedRegion, category, collection, index) => {
+    const rankingData = {
+        application_identifier: applicationIdentifier,
+        region: selectedRegion,
+        category_identifier: category,
+        collection_identifier: collection,
+        rank: index + 1,
+    };
+
+    await supabase.ranking(rankingData);
 };
