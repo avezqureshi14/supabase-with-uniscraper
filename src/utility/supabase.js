@@ -1,11 +1,14 @@
 import { createClient } from "@supabase/supabase-js";
-import { logError } from "./logError";
 const supabaseUrl = "https://jjvixvxxvjucmnddztii.supabase.co";
 const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqdml4dnh4dmp1Y21uZGR6dGlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc4MzY4MzEsImV4cCI6MjAyMzQxMjgzMX0.fiSiIflKB14U3yJeZ83-nwksOdm58TnlDWcaquHAnVQ";
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 import axios from "axios";
+const logError = (error) => {
+  console.error("Error fetching data:", error);
+  return { error: error.message || "Internal Server Error" };
+};
 
 const handleSupabaseResponse = (response, message) => {
   if (response.error) {
