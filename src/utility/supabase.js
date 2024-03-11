@@ -234,26 +234,4 @@ export const ranking = async (rankingData) => {
 };
 
 
-export const uploadImageToSupabase = async (imageUrl, imageName) => {
-  try {
-    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-    const buffer = Buffer.from(response.data, 'binary');
-
-    const { data, error } = await supabase.storage
-      .from('screenshot') // Replace with your actual bucket name
-      .upload(imageName, buffer, { cacheControl: '3600' });
-
-    if (error) {
-      return logError("getting category from database", error);
-    }
-
-    console.log('Image uploaded successfully:', data.Key);
-    return data.Key; // You might want to return the uploaded image key or URL
-  } catch (error) {
-    console.error('Error uploading image:', error.message);
-    throw error; // Rethrow the error for the caller to handle
-  }
-};
-
-
 
