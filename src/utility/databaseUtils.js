@@ -1,6 +1,6 @@
 import * as supabase from "./supabase.js";
 
-export const createApplicationInDatabase = async (data, platform, developer, category, collection, platformId) => {
+export const addApplication = async (data, platform, developer, category, collection, platformId) => {
     return await supabase.createApplicationInDatabase({
         application_identifier: platform === "APP_STORE" ? data?.id : data?.appId,
         title: data?.title,

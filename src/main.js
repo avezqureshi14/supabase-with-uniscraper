@@ -10,6 +10,7 @@ import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import * as supabase from "./utility/supabase.js";
 import { countries } from "./constants/countries.js";
+import { addApplication } from "./utility/databaseUtils.js";
 
 const runActor = async () => {
   try {
@@ -68,7 +69,7 @@ const runActor = async () => {
                 device_name: data?.supportedDevices,
               };
 
-              const application = await createApplicationInDatabase(data, platform, developer, category, collection, platformId);
+              const application = await addApplication(data, platform, developer, category, collection, platformId);
               const applicationIdentifier = application?.application_identifier;
               const reviews = [];
               // appId, sortReviewsBy, numReviews
