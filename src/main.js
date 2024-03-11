@@ -10,7 +10,7 @@ import { logError } from "./utility/logError.js";
 import { ScraperFactory } from "./scrappers/scrapper-factory.js";
 import * as supabase from "./utility/supabase.js";
 import { countries } from "./constants/countries.js";
-import { addApplication } from "./utility/databaseUtils.js";
+import { addApplication, addDeveloper } from "./utility/databaseUtils.js";
 
 const runActor = async () => {
   try {
@@ -43,7 +43,7 @@ const runActor = async () => {
               const collection = await supabase.getCollectionFromDatabase(
                 selectedCollection
               );
-              const developer = await createDeveloperIfNeeded(data, platform);
+              const developer = await addDeveloper(data, platform);
               const platformId = await supabase.getPlatformFromDatabase(
                 platform
               );
