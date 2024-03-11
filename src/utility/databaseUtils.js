@@ -1,7 +1,6 @@
 import * as supabase from "./supabase.js";
 
 export const addApplication = async (data, platform, developer, category, collection, platformId) => {
-    console.log(data?.appId);
     return await supabase.createApplicationInDatabase({
         application_identifier: platform === "APP_STORE" ? data?.id : data?.appId,
         title: data?.title,
@@ -39,3 +38,19 @@ export const addApplication = async (data, platform, developer, category, collec
     });
 };
 
+
+export const addDeveloper = async (data, platform) => {
+    const developer = await supabase.getDeveloperFromDatabase(data.developerId);
+
+    if (!developer) {
+        const developerData = {
+            developer_identifier: data.developerId,
+            name: data.developer,
+            developer_url: platform === "APP_STORE" ? data.developerUrl : data.developerEmail,
+            developer_website: data.developerWebsite,
+        };
+        return await supabase.createDeveloperInDatabase(developerData);
+    }
+
+    return developer;
+};

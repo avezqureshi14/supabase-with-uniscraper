@@ -43,25 +43,7 @@ const runActor = async () => {
               const collection = await supabase.getCollectionFromDatabase(
                 selectedCollection
               );
-              let developer = await supabase.getDeveloperFromDatabase(
-                data.developerId
-              );
-
-              if (!developer) {
-                const developerData = {
-                  developer_identifier: data.developerId,
-                  name: data.developer,
-                  developer_url:
-                    platform === "APP_STORE"
-                      ? data.developerUrl
-                      : data.developerEmail,
-                  developer_website: data.developerWebsite,
-                };
-                developer = await supabase.createDeveloperInDatabase(
-                  developerData
-                );
-              }
-
+              const developer = await createDeveloperIfNeeded(data, platform);
               const platformId = await supabase.getPlatformFromDatabase(
                 platform
               );
@@ -105,7 +87,6 @@ const runActor = async () => {
               }
               reviewData.good = goodReviews;
               reviewData.bad = badReviews;
-
               const selectedRegion = countries[selectedCountry];
               const rankingData = {
                 application_identifier: applicationIdentifier,
@@ -120,7 +101,6 @@ const runActor = async () => {
                 tablet: data?.ipadScreenshots,
                 tv: data?.appletvScreenshots,
               };
-
               if (applicationIdentifier) {
                 const review_identifier = await supabase.addReviewToDatabase(
                   applicationIdentifier,
